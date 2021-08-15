@@ -1,24 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import "./App.css";
+import List from "./components/List";
+import AddToList from "./components/AddToList";
+
+export interface Props {
+  people: {
+    name: string;
+    age: number;
+    url: string;
+    email?: string;
+  }[];
+}
 
 function App() {
+  const [people, setPeople] = useState<Props["people"]>([]);
+
+  const setThm = (): void => {
+    let arr: Props["people"] = [];
+    for (let x = 0; x < 1; x++) {
+      arr.push({
+        name: `Judy D. Nunez`,
+        age: 25,
+        url: `https://source.unsplash.com/50${x}x50${x}/?face`,
+        email: `JudyDNunez@gmail.com`,
+      });
+    }
+    setPeople(arr);
+  };
+
+  useEffect(() => {
+    setThm();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>People Invited to the party</h1>
+      {people.map((person, index): JSX.Element => {
+        return <List key={index} person={person} />;
+      })}
+      <AddToList people={people} setPeople={setPeople} />
     </div>
   );
 }
